@@ -3,6 +3,12 @@ import sys
 
 
 def create_nginx_and_gunicorn_files(domena, projekt):
+    # Kopia projektu do katalogu www oraz uruchomienie virtualnego srodowiska
+    os.system('cp -r $(pwd)/'+projekt+' /var/www/')
+    os.system('python3 -m venv /var/www/'+projekt+'/'+projekt+'env')
+    os.system('source /var/www/'+projekt+'/'+projekt+'env/bin/activate')
+    os.system('export FLASK_APP=app.py')
+    os.system('pip3 install -r /var/www/'+projekt+'/requirements.txt')
 
     # Wczytanie plików nginx oraz gunicorn
     plik_nginxa = ''
