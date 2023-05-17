@@ -1,0 +1,84 @@
+<div class="container main pt-5">
+<div class="table-container container-fluid table-responsive">
+
+	<h3 class="mb-4 text-center">Lista zadań</h3>
+    <div class="col-md-7">
+    {% if current_user.colors == 'dark' %}
+        <table class="table text-light table-condensed table-striped custom-table">
+      {% else %}
+      <table class="table text-dark table-condensed table-striped custom-table">
+    {% endif %}
+        <thead>
+            <tr class="row table-width">
+                <th scope="col">#</th>
+                <th class="col"scope="col">Zadanie</th>
+                <th class="col" scope="col">Opis</th>
+                <th class="col" scope="col">Utworzył</th>
+                <th class="col" scope="col">Wykonawca</th>
+                <th class="col" scope="col">Utworzono</th>
+                <th class="col" scope="col">Termin</th>
+            </tr>
+        </thead>
+        <tbody id="myGroup">
+
+        {% for task in tasks %}
+            <tr class="row accordion-toggle collapsed table-width text-secondary" data-toggle="collapse" data-target="#a{{ task.id }}">
+                    <td scope="row">{{ task.id }}</td>
+                    <td class="col">{{ task.title }}</td>
+                    <td class="col text-truncate"><div class="fa"></div>{{ task.description }}</td>
+                    <td class="col">{{ task.creator }}</td>
+                    <td class="col">{{ task.contractor }}</td>
+                    <td class="col">{{ task.timestamp_created }}</td>
+                    <td class="col">{{ task.timestamp_deadline }}</td>
+
+
+            </tr>
+            <tr class="row table-width">
+                <td colspan="6" class="hiddenRow">
+                    <div id="a{{ task.id }}" class="accordian-body collapse text-break hiddenDescription text-secondary" data-parent="#myGroup">
+                        <a class="full-text">{{ task.description }} </a>
+                        <br>
+                    <div  class="btn-group btn-group-sm pt-4" role="group">
+                    {% if task.creator == current_user %}
+                    <div class="btn btn-secondary p-0 m-0 fit-cont">
+                    <form action="{{ url_for('edittask', id=task.id) }}" class="" method="get" novalidate>
+                            {{ form2.edit(class_="btn btn-lg btn-secondary") }}
+                    </form>
+                    </div>
+                    <div class="btn btn-secondary p-0 m-0 fit-cont">
+                    <form action="{{ url_for('deletetask', id=task.id) }}" class="" method="get" novalidate>
+                            {{ form2.delete(class_="btn btn-lg btn-secondary") }}
+                    </form>
+                    </div>
+                    {% endif %}
+                    <div class="btn btn-secondary p-0 m-0 fit-cont">
+                    <form action="{{ url_for('finishtask', id=task.id) }}" class="" method="get" novalidate>
+                            {{ form2.finish(class_="btn btn-lg btn-secondary") }}
+                    </form>
+                    </div>
+                    <div class="btn btn-secondary p-0 m-0 fit-cont">
+                    <form action="{{ url_for('task', id=task.id) }}" class="" method="get" novalidate>
+                            {{ form2.comment(class_="btn btn-lg btn-secondary") }}
+                    </form>
+                    </div>
+                    </div>
+                        {% for comment in task.comment %}
+                        <div class="pt-3"><p> {{ comment.text }}</p>
+                        <p class="d-inline pr-4"> {{ comment.creator }}</p>
+                        <p class="d-inline pr-4"> {{ comment.timestamp_created }}</p></div>
+                            <hr>
+                    {%  endfor %}
+                    </div>
+
+
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+
+    </div>
+
+</div>
+</div>
+

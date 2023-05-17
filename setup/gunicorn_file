@@ -1,0 +1,12 @@
+[Unit]
+After=network.target
+
+[Service]
+User=root
+Group=www-data
+WorkingDirectory=/var/www/NAZWA_PROJEKTU
+Environment="PATH=/var/www/NAZWA_PROJEKTU/NAZWA_PROJEKTUenv/bin"
+ExecStart=/var/www/NAZWA_PROJEKTU/NAZWA_PROJEKTUenv/bin/gunicorn --workers 1 --bind unix:NAZWA_PROJEKTU.sock -m 007 app:app
+
+[Install]
+WantedBy=multi-user.target

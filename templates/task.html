@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content  %}
+
+<div class="loginBox text-center">
+    <main class="form-task w-100 m-auto">
+        <div class="row justify-content-center">
+        <div class="col-md-12 mb-5">
+	<h3 class="mb-4 text-center">{{ task.title }}</h3>
+<a class="full-text">{{ task.description }} </a>
+        {{ current_user.email }}
+    <form action="{{ url_for('task', id=task.id) }}" class="" method="post" novalidate>
+        {{ comment_form.hidden_tag() }}
+
+        <div class="form-group row">
+            {{ comment_form.text(class_="form-control") }}
+            {{ comment_form.text.label(class_="form-control-placeholder") }}
+            {% for error in comment_form.text.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div class="button col-md-12 text-center">
+                <p>{{ comment_form.submit(class_="w-100 btn btn-lg btn-primary") }}</p>
+        </div>
+
+    </form>
+        <br>
+            <div  class="btn-group btn-group-sm pt-4" role="group">
+            {% if task.creator == current_user %}
+            <div class="btn btn-secondary p-0 m-0 fit-cont">
+            <form action="{{ url_for('edittask', id=task.id) }}" class="" method="post" novalidate>
+                    {{ form2.edit(class_="btn btn-lg btn-secondary") }}
+            </form>
+            </div>
+            <div class="btn btn-secondary p-0 m-0 fit-cont">
+            <form action="{{ url_for('deletetask', id=task.id) }}" class="" method="post" novalidate>
+                    {{ form2.delete(class_="btn btn-lg btn-secondary") }}
+            </form>
+            </div>
+            {% endif %}
+            <div class="btn btn-secondary p-0 m-0 fit-cont">
+            <form action="{{ url_for('finishtask', id=task.id) }}" class="" method="post" novalidate>
+                    {{ form2.finish(class_="btn btn-lg btn-secondary") }}
+            </form>
+            </div></div>
+
+                {% for comment in task.comment %}
+                <div class=" pt-3">
+                <p> {{ comment.text }}</p>
+
+                    <p class="d-inline pr-4"> {{ comment.creator }}</p>
+                    <p class="d-inline pr-4"> {{ comment.timestamp_created }}</p>
+                        <hr></div>
+            {%  endfor %}
+
+        </div>
+        </div></main></div>
+
+
+{% endblock %}
